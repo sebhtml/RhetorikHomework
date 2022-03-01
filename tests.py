@@ -46,6 +46,27 @@ class TestConvexAreas(unittest.TestCase):
         heights = [5, 1, 3, 4, 5]
         self.assertEqual(liquid_calculator.ConvexAreas()(heights), 7)
 
+    def test_case_3(self):
+        #
+        # input = [4,3,4,3,4]
+        # output = 2
+        #
+        #
+        #                    - 5
+        #                    |
+        #   *     *     *    - 4
+        #                    |
+        #      *     *       - 3
+        #                    |
+        #                    - 2
+        #                    |
+        #                    - 1
+        #                    |
+        #                    - 0
+        #   |--|--|--|--|--|
+        #   0  1  2  3  4  5
+        heights = [4, 3, 4, 3, 4]
+        self.assertEqual(liquid_calculator.ConvexAreas()(heights), 2)
 
 if __name__ == '__main__':
     unittest.main()
