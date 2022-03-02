@@ -20,8 +20,8 @@ def get_lake_area(points, lake_first_point, lake_last_point):
             polygon_points.append(points[i])
         previous_to_last_y = points[lake_last_point - 1][1]
         parameter = (first_y -previous_to_last_y + 0.0) / (last_y - previous_to_last_y)
-        halfedge = EdgeSplit(lake_last_point - 1, lake_last_point, parameter)
-        interpolated_point = LinearInterpolator()(halfedge, points)
+        edgeSplit = EdgeSplit(lake_last_point - 1, lake_last_point, parameter)
+        interpolated_point = LinearInterpolator()(edgeSplit, points)
         polygon_points.append(interpolated_point)
         return -Polygon(polygon_points).area()
 
@@ -29,8 +29,8 @@ def get_lake_area(points, lake_first_point, lake_last_point):
         polygon_points = []
         next_to_first_y = points[lake_first_point + 1][1]
         parameter = (last_y - next_to_first_y + 0.0) / (first_y - next_to_first_y)
-        halfedge = EdgeSplit(lake_first_point + 1, lake_first_point, parameter)
-        interpolated_point = LinearInterpolator()(halfedge, points)
+        edgeSplit = EdgeSplit(lake_first_point + 1, lake_first_point, parameter)
+        interpolated_point = LinearInterpolator()(edgeSplit, points)
         polygon_points.append(interpolated_point)
 
         for i in range(lake_first_point + 1, lake_last_point + 1):

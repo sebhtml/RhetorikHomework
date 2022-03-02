@@ -9,18 +9,18 @@ class TestLinearInterpolator(unittest.TestCase):
         p0 = (50, 100)
         p1 = (150, 200)
         points = [p0, p1]
-        halfedge = liquid_calculator.EdgeSplit(0, 1, 0.5)
+        edgeSplit = liquid_calculator.EdgeSplit(0, 1, 0.5)
         interpolator = liquid_calculator.LinearInterpolator()
-        interpolated_point = interpolator(halfedge, points)
+        interpolated_point = interpolator(edgeSplit, points)
         self.assertEqual(interpolated_point, (100, 150))
 
     def test_case_1(self):
         p0 = (50, 100)
         p1 = (150, 200)
         points = [p0, p1]
-        halfedge = liquid_calculator.EdgeSplit(0, 1, 0.20)
+        edgeSplit = liquid_calculator.EdgeSplit(0, 1, 0.20)
         interpolator = liquid_calculator.LinearInterpolator()
-        interpolated_point = interpolator(halfedge, points)
+        interpolated_point = interpolator(edgeSplit, points)
         self.assertEqual(interpolated_point, (70, 120))
 
 class TestConvexAreas(unittest.TestCase):
@@ -120,9 +120,9 @@ class TestConvexAreas(unittest.TestCase):
         p2 = (2,4)
         points = [p0, p1, p2]
         parameter = (p0[1] - p1[1] + 0.0) / (p2[1] - p1[1] + 0.0)
-        halfedge = liquid_calculator.EdgeSplit(1, 2, parameter)
+        edgeSplit = liquid_calculator.EdgeSplit(1, 2, parameter)
         interpolator = liquid_calculator.LinearInterpolator()
-        interpolated_point = interpolator(halfedge, points)
+        interpolated_point = interpolator(edgeSplit, points)
 
         expected_area = 0
         expected_area += abs((p1[0] - p0[0]) * (p1[1] - p0[1]) / 2)
@@ -145,9 +145,9 @@ class TestConvexAreas(unittest.TestCase):
         p2 = (2,3)
         points = [p0, p1, p2]
         parameter = (p2[1] - p1[1] + 0.0) / (p0[1] - p1[1] + 0.0)
-        halfedge = liquid_calculator.EdgeSplit(1, 0, parameter)
+        edgeSplit = liquid_calculator.EdgeSplit(1, 0, parameter)
         interpolator = liquid_calculator.LinearInterpolator()
-        interpolated_point = interpolator(halfedge, points)
+        interpolated_point = interpolator(edgeSplit, points)
 
         expected_area = 0
         expected_area += abs((p1[0] - interpolated_point[0]) * (p1[1] - interpolated_point[1]) / 2)
