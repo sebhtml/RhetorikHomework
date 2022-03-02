@@ -7,11 +7,13 @@ from .linear_interpolator import LinearInterpolator
 def get_lake_area(points, lake_first_point, lake_last_point):
     first_y = points[lake_first_point][1]
     last_y = points[lake_last_point][1]
+
     if first_y == last_y:
         polygon_points = []
         for i in range(lake_first_point, lake_last_point + 1):
             polygon_points.append(points[i])
         return -Polygon(polygon_points).area()
+
     elif first_y < last_y:
         polygon_points = []
         for i in range(lake_first_point, lake_last_point):
@@ -23,14 +25,35 @@ def get_lake_area(points, lake_first_point, lake_last_point):
         polygon_points.append(interpolated_point)
         return -Polygon(polygon_points).area()
 
+    elif first_y > last_y:
+        polygon_points = []
+        next_to_first_y = points[lake_first_point + 1][1]
+        parameter = (last_y - next_to_first_y + 0.0) / (first_y - next_to_first_y)
+        halfedge = EdgeSplit(lake_first_point + 1, lake_first_point, parameter)
+        interpolated_point = LinearInterpolator()(halfedge, points)
+        polygon_points.append(interpolated_point)
+
+        for i in range(lake_first_point + 1, lake_last_point + 1):
+            polygon_points.append(points[i])
+        return -Polygon(polygon_points).area()
+
     raise Exception("Not implemented yet.")
 
 class ConvexAreas:
-    pass
+    def __init__(self):
+        self.sum = 0
+
+    def __del__(self):
+        pass
+
+
+    def close_lake(self, points, lake_first_point, lake_last_point):
+        if (lake_last_point - lake_first_point) > 1:
+            # close the lake
+               self.sum += get_lake_area(points, lake_first_point, lake_last_point)
 
     def __call__(self, heights):
         points = HeightsToPoints()(heights)
-        sum = 0
 
         lake_first_point = None
         lake_last_point = None
@@ -48,11 +71,12 @@ class ConvexAreas:
                     lake_last_point = current_point
                 else:
                     lake_last_point = current_point
-                    if (lake_last_point - lake_first_point) > 1:
-                        # close the lake
-                        sum += get_lake_area(points, lake_first_point, lake_last_point)
+                    self.close_lake(points, lake_first_point, lake_last_point)
                     # Reset lake
                     lake_first_point = current_point
                     lake_last_point = current_point
                 current_point += 1
-        return sum
+
+        self.close_lake(points, lake_first_point, lake_last_point)
+
+        return self.sum

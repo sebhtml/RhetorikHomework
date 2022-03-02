@@ -133,6 +133,31 @@ class TestConvexAreas(unittest.TestCase):
 
         self.assertEqual(math.isclose(actual_area, expected_area, rel_tol=1e-9), True)
 
+    def test_convex_area_with_linear_algebra_2(self):
+        #
+        # input = [8,2,3]
+        # output = 2
+        #
+        # the water level will touch the left wall at the same height as on the left wall
+
+        p0 = (0,8)
+        p1 = (1,2)
+        p2 = (2,3)
+        points = [p0, p1, p2]
+        parameter = (p2[1] - p1[1] + 0.0) / (p0[1] - p1[1] + 0.0)
+        halfedge = liquid_calculator.EdgeSplit(1, 0, parameter)
+        interpolator = liquid_calculator.LinearInterpolator()
+        interpolated_point = interpolator(halfedge, points)
+
+        expected_area = 0
+        expected_area += abs((p1[0] - interpolated_point[0]) * (p1[1] - interpolated_point[1]) / 2)
+        expected_area += abs((p2[0] - p1[0]) * (p2[1] - p1[1]) / 2)
+
+        heights = [p0[1], p1[1], p2[1]]
+        actual_area = liquid_calculator.ConvexAreas()(heights)
+
+        self.assertEqual(math.isclose(actual_area, expected_area, rel_tol=1e-9), True)
+
 
 if __name__ == '__main__':
     unittest.main()
