@@ -7,6 +7,8 @@ For the docstring tags, Sphinx markup is used.
 
 # Tests
 
+Need at least Python 3.5
+
 ```bash
 python3 tests.py
 ```
