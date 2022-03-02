@@ -1,6 +1,6 @@
 
 
-class HalfEdge:
+class EdgeSplit:
     def __init__(self, from_index, to_index, parameter):
         self.from_index = from_index
         self.to_index = to_index
